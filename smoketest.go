@@ -1,4 +1,4 @@
-package main
+package protohackers
 
 import (
 	"errors"
@@ -7,17 +7,6 @@ import (
 	"net"
 	"time"
 )
-
-func main() {
-	listener, err := net.Listen("tcp", "0.0.0.0:8080")
-	if err != nil {
-		fmt.Printf("Failed to listen: %s\n", err)
-		return
-	}
-	defer listener.Close()
-
-	SmokeTest(listener)
-}
 
 func SmokeTest(listener net.Listener) {
 	fmt.Println("Waiting for client...")

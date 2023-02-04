@@ -1,10 +1,12 @@
-package main
+package protohackers_test
 
 import (
 	"fmt"
 	"net"
 	"testing"
 	"time"
+
+	"protohackers"
 )
 
 func TestSingleEcho(t *testing.T) {
@@ -16,7 +18,7 @@ func TestSingleEcho(t *testing.T) {
 	}
 	defer listener.Close()
 
-	go SmokeTest(listener)
+	go protohackers.SmokeTest(listener)
 
 	conn := assertClient(t, "tcp", listener.Addr().String(), message)
 
@@ -31,7 +33,7 @@ func TestFiveSimultaneousConnections(t *testing.T) {
 	}
 	defer listener.Close()
 
-	go SmokeTest(listener)
+	go protohackers.SmokeTest(listener)
 
 	// Set up 5 clients, assert that we get all echos correctly
 	conns := make([]net.Conn, 0, 5)
