@@ -1,7 +1,6 @@
 package protohackers
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -9,19 +8,7 @@ import (
 )
 
 func SmokeTest(listener net.Listener) {
-	fmt.Println("Waiting for client...")
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			if errors.Is(err, net.ErrClosed) {
-				fmt.Printf("Listener closed, exiting.\n")
-				break
-			}
-			fmt.Printf("Failed to accept: %s\n", err)
-		}
-		go smokeTestHandler(conn)
-	}
+	Serve(listener, smokeTestHandler)
 }
 
 func smokeTestHandler(conn net.Conn) {

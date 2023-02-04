@@ -56,7 +56,7 @@ func assertClient(t *testing.T, network string, address string, message string) 
 	defer conn.Close()
 
 	deadline := time.Now().Add(5 * time.Second)
-	conn.SetDeadline(deadline)
+	err = conn.SetDeadline(deadline)
 	if err != nil {
 		t.Fatalf("Failed to set deadline: %s\n", err)
 	}
