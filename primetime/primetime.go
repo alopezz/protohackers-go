@@ -1,4 +1,4 @@
-package protohackers
+package primetime
 
 import (
 	"bufio"
@@ -7,10 +7,11 @@ import (
 	"io"
 	"math"
 	"net"
+	"protohackers/protos"
 )
 
 func PrimeTime(listener net.Listener) {
-	Serve(listener, PrimeTimeHandler)
+	protos.Serve(listener, PrimeTimeHandler)
 }
 
 func PrimeTimeHandler(conn net.Conn) {

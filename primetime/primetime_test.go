@@ -1,4 +1,4 @@
-package protohackers_test
+package primetime_test
 
 import (
 	"bufio"
@@ -10,10 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"protohackers"
+	"protohackers/primetime"
 )
 
-// TODO Test that it actually disconnects the client
 func TestRespondsToMalformedRequestWithMalformedResponseAndDisconnects(t *testing.T) {
 	listener, err := net.Listen("tcp", "localhost:")
 	if err != nil {
@@ -21,7 +20,7 @@ func TestRespondsToMalformedRequestWithMalformedResponseAndDisconnects(t *testin
 	}
 	defer listener.Close()
 
-	go protohackers.PrimeTime(listener)
+	go primetime.PrimeTime(listener)
 
 	testCases := map[string]string{
 		"Malformed JSON":         "{malformed;json.",
@@ -79,7 +78,7 @@ func TestRespondsWithCorrectIsPrimeAnswer(t *testing.T) {
 	}
 	defer listener.Close()
 
-	go protohackers.PrimeTime(listener)
+	go primetime.PrimeTime(listener)
 
 	testCases := []struct {
 		input    int

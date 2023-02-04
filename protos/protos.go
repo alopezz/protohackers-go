@@ -1,4 +1,4 @@
-package protohackers
+package protos
 
 import (
 	"errors"

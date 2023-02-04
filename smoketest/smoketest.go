@@ -1,14 +1,15 @@
-package protohackers
+package smoketest
 
 import (
 	"fmt"
 	"io"
 	"net"
+	"protohackers/protos"
 	"time"
 )
 
 func SmokeTest(listener net.Listener) {
-	Serve(listener, smokeTestHandler)
+	protos.Serve(listener, smokeTestHandler)
 }
 
 func smokeTestHandler(conn net.Conn) {
