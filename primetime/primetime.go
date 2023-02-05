@@ -39,19 +39,19 @@ func handler(conn net.Conn) {
 			fmt.Printf("Error when parsing request: %s\n", err)
 			io.WriteString(conn, "{}\n")
 			break
-		} else {
-			b, err := json.Marshal(response{
-				Method: "isPrime",
-				Prime:  isPrime(*input),
-			})
-			if err != nil {
-				fmt.Printf("Error serializing response: %s\n", err)
-				io.WriteString(conn, "{}\n")
-				continue
-			}
-			conn.Write(b)
-			io.WriteString(conn, "\n")
 		}
+		b, err := json.Marshal(response{
+			Method: "isPrime",
+			Prime:  isPrime(*input),
+		})
+		if err != nil {
+			fmt.Printf("Error serializing response: %s\n", err)
+			io.WriteString(conn, "{}\n")
+			continue
+		}
+		conn.Write(b)
+		io.WriteString(conn, "\n")
+
 	}
 }
 
