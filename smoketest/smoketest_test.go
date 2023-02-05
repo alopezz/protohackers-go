@@ -12,40 +12,30 @@ import (
 func TestSingleEcho(t *testing.T) {
 	message := "Hello World"
 
-	listener, err := net.Listen("tcp", "localhost:")
+	server, err := smoketest.Serve("localhost:")
 	if err != nil {
-		t.Fatalf("Failed to listen: %s\n", err)
+		t.Fatalf("Failed to start server: %s\n", err)
 	}
-	defer listener.Close()
+	defer server.Close()
 
-	go smoketest.SmokeTest(listener)
-
-	conn := assertClient(t, "tcp", listener.Addr().String(), message)
+	conn := assertClient(t, "tcp", server.Addr().String(), message)
 
 	conn.Close()
-	listener.Close()
+	server.Close()
 }
 
 func TestFiveSimultaneousConnections(t *testing.T) {
-	listener, err := net.Listen("tcp", "localhost:9999")
+	server, err := smoketest.Serve("localhost:")
 	if err != nil {
-		t.Fatalf("Failed to listen: %s\n", err)
+		t.Fatalf("Failed to start server: %s\n", err)
 	}
-	defer listener.Close()
-
-	go smoketest.SmokeTest(listener)
+	defer server.Close()
 
 	// Set up 5 clients, assert that we get all echos correctly
 	conns := make([]net.Conn, 0, 5)
 	for i := 1; i <= 5; i++ {
-		conns = append(conns, assertClient(t, "tcp", listener.Addr().String(), fmt.Sprintf("Hello n%d\n", i)))
+		conns = append(conns, assertClient(t, "tcp", server.Addr().String(), fmt.Sprintf("Hello n%d\n", i)))
 	}
-
-	// Only then we go and close connections
-	for _, conn := range conns {
-		conn.Close()
-	}
-	listener.Close()
 }
 
 func assertClient(t *testing.T, network string, address string, message string) net.Conn {

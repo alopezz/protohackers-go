@@ -14,13 +14,11 @@ import (
 )
 
 func TestRespondsToMalformedRequestWithMalformedResponseAndDisconnects(t *testing.T) {
-	listener, err := net.Listen("tcp", "localhost:")
+	server, err := primetime.Serve("localhost:")
 	if err != nil {
-		t.Fatalf("Failed to listen: %s\n", err)
+		t.Fatalf("Failed to start server: %s\n", err)
 	}
-	defer listener.Close()
-
-	go primetime.PrimeTime(listener)
+	defer server.Close()
 
 	testCases := map[string]string{
 		"Malformed JSON":         "{malformed;json.",
@@ -32,7 +30,7 @@ func TestRespondsToMalformedRequestWithMalformedResponseAndDisconnects(t *testin
 
 	for tc, message := range testCases {
 		t.Run(tc, func(t *testing.T) {
-			conn, err := net.Dial("tcp", listener.Addr().String())
+			conn, err := net.Dial("tcp", server.Addr().String())
 			if err != nil {
 				t.Fatalf("Error establishing a connection: %s\n", err)
 			}
@@ -72,13 +70,11 @@ func TestRespondsToMalformedRequestWithMalformedResponseAndDisconnects(t *testin
 }
 
 func TestRespondsWithCorrectIsPrimeAnswer(t *testing.T) {
-	listener, err := net.Listen("tcp", "localhost:")
+	server, err := primetime.Serve("localhost:")
 	if err != nil {
-		t.Fatalf("Failed to listen: %s\n", err)
+		t.Fatalf("Failed to start server: %s\n", err)
 	}
-	defer listener.Close()
-
-	go primetime.PrimeTime(listener)
+	defer server.Close()
 
 	testCases := []struct {
 		input    int
@@ -96,7 +92,7 @@ func TestRespondsWithCorrectIsPrimeAnswer(t *testing.T) {
 		{input: 97, expected: true},
 	}
 
-	conn, err := net.Dial("tcp", listener.Addr().String())
+	conn, err := net.Dial("tcp", server.Addr().String())
 	if err != nil {
 		t.Fatalf("Error establishing a connection: %s\n", err)
 	}

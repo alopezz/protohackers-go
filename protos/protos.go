@@ -8,6 +8,11 @@ import (
 
 type ConnHandler func(conn net.Conn)
 
+type Server interface {
+	Close() error
+	Addr() net.Addr
+}
+
 func Serve(listener net.Listener, handle ConnHandler) {
 	fmt.Println("Waiting for client...")
 

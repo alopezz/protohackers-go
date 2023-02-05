@@ -2,19 +2,17 @@ package main
 
 import (
 	"fmt"
-	"net"
 	"os"
 	"strconv"
 
 	"protohackers/primetime"
+	"protohackers/protos"
 	"protohackers/smoketest"
 )
 
-type protocolImplementation func(net.Listener)
-
-var protos = map[int]protocolImplementation{
-	0: smoketest.SmokeTest,
-	1: primetime.PrimeTime,
+var servers = map[int]func(string) (protos.Server, error){
+	0: smoketest.Serve,
+	1: primetime.Serve,
 }
 
 func main() {
@@ -23,14 +21,15 @@ func main() {
 		address = "0.0.0.0"
 	}
 
-	listener, err := net.Listen("tcp", address+":8080")
-	if err != nil {
-		fmt.Printf("Failed to listen: %s\n", err)
-		return
-	}
-	defer listener.Close()
-
 	problem, _ := strconv.Atoi(os.Getenv("PROTOHACKERS_PROBLEM"))
 
-	protos[problem](listener)
+	server, err := servers[problem](address + ":8080")
+	if err != nil {
+		fmt.Printf("Failed to start server: %s\n", err)
+		os.Exit(1)
+	}
+	defer server.Close()
+
+	// Wait forever
+	select {}
 }

@@ -8,11 +8,21 @@ import (
 	"time"
 )
 
-func SmokeTest(listener net.Listener) {
-	protos.Serve(listener, smokeTestHandler)
+func Serve(address string) (protos.Server, error) {
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to listen: %s\n", err)
+	}
+	go protos.Serve(listener, handler)
+
+	return &server{Listener: listener}, nil
 }
 
-func smokeTestHandler(conn net.Conn) {
+type server struct {
+	net.Listener
+}
+
+func handler(conn net.Conn) {
 	defer conn.Close()
 	fmt.Println("Client connected")
 
