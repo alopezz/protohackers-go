@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"protohackers/meanstoanend"
 	"protohackers/primetime"
 	"protohackers/protos"
 	"protohackers/smoketest"
@@ -13,6 +14,7 @@ import (
 var servers = map[int]func(string) (protos.Server, error){
 	0: smoketest.Serve,
 	1: primetime.Serve,
+	2: meanstoanend.Serve,
 }
 
 func main() {
