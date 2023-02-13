@@ -1,0 +1,25 @@
+# fly.toml file generated for protohackers-alz on 2023-02-04T07:17:49+01:00
+
+app = "protohackers-alz"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  builder = "paketobuildpacks/builder:base"
+  buildpacks = ["gcr.io/paketo-buildpacks/go"]
+
+[build.args]
+  BP_GO_TARGETS = "./cmd"
+
+[env]
+  PORT = "8080"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  internal_port = 8080
+  protocol = "udp"
+  [[services.ports]]
+    port = 8080

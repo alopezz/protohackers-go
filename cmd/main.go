@@ -10,6 +10,7 @@ import (
 	"protohackers/primetime"
 	"protohackers/protos"
 	"protohackers/smoketest"
+	"protohackers/unusualdatabase"
 )
 
 var servers = map[int]func(string) (protos.Server, error){
@@ -17,6 +18,7 @@ var servers = map[int]func(string) (protos.Server, error){
 	1: primetime.Serve,
 	2: meanstoanend.Serve,
 	3: budgetchat.Serve,
+	4: unusualdatabase.Serve,
 }
 
 func main() {
