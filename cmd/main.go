@@ -7,11 +7,14 @@ import (
 
 	"protohackers/budgetchat"
 	"protohackers/meanstoanend"
+	"protohackers/mobinthemiddle"
 	"protohackers/primetime"
 	"protohackers/protos"
 	"protohackers/smoketest"
 	"protohackers/unusualdatabase"
 )
+
+const UPSTREAM_BUDGETCHAT_ADDRESS = "chat.protohackers.com:16963"
 
 var servers = map[int]func(string) (protos.Server, error){
 	0: smoketest.Serve,
@@ -19,6 +22,9 @@ var servers = map[int]func(string) (protos.Server, error){
 	2: meanstoanend.Serve,
 	3: budgetchat.Serve,
 	4: unusualdatabase.Serve,
+	5: func(addr string) (protos.Server, error) {
+		return mobinthemiddle.Serve(addr, UPSTREAM_BUDGETCHAT_ADDRESS)
+	},
 }
 
 func main() {
